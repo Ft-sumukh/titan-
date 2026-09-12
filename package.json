@@ -1,0 +1,30 @@
+{
+  "name": "titan-platform",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Enterprise Operational Resilience & Automated Incident Remediation Platform",
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "dev:infra": "docker compose -f infrastructure/docker-compose.yml up -d",
+    "dev:backend": "npm run dev --workspace=backend",
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "build": "npm run build --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present"
+  },
+  "keywords": [
+    "resilience",
+    "incident-management",
+    "runbooks",
+    "telemetry",
+    "sre",
+    "devops",
+    "cloudevents"
+  ],
+  "author": "Project TITAN Contributors",
+  "license": "Apache-2.0"
+}

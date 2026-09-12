@@ -4,6 +4,7 @@ import rateLimit from '@fastify/rate-limit';
 import { config } from './config/env.js';
 import { logger } from './utils/logger.js';
 import { ingestionRoutes } from './ingestion/gateway.js';
+import { incidentRoutes } from './incidents/api.js';
 import { getRedisClient, setupTelemetryConsumerGroup } from './infrastructure/redis.js';
 import { checkDatabaseHealth, closeDatabasePool } from './infrastructure/database.js';
 
@@ -26,8 +27,9 @@ export async function buildServer() {
     timeWindow: '1 minute',
   });
 
-  // Register Ingestion Gateway Plugin
+  // Register Plugins
   await fastify.register(ingestionRoutes);
+  await fastify.register(incidentRoutes);
 
   return fastify;
 }

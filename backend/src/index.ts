@@ -1,10 +1,13 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import rateLimit from '@fastify/rate-limit';
+import fastifyWebsocket from '@fastify/websocket';
 import { config } from './config/env.js';
 import { logger } from './utils/logger.js';
 import { ingestionRoutes } from './ingestion/gateway.js';
 import { incidentRoutes } from './incidents/api.js';
+import { runbookRoutes } from './runbooks/api.js';
+import { webSocketRoutes } from './websocket/hub.js';
 import { getRedisClient, setupTelemetryConsumerGroup } from './infrastructure/redis.js';
 import { checkDatabaseHealth, closeDatabasePool } from './infrastructure/database.js';
 
@@ -27,9 +30,14 @@ export async function buildServer() {
     timeWindow: '1 minute',
   });
 
-  // Register Plugins
+  // Register WebSocket Engine
+  await fastify.register(fastifyWebsocket);
+
+  // Register Application Plugins
   await fastify.register(ingestionRoutes);
   await fastify.register(incidentRoutes);
+  await fastify.register(runbookRoutes);
+  await fastify.register(webSocketRoutes);
 
   return fastify;
 }
